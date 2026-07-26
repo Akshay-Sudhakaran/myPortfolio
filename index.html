@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akshay Sudhakaran — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#15141F; --bg2:#221F30; --bg3:#332D46;
+    --accent:#9C87EF; --accent-soft:rgba(156,135,239,0.22);
+    --paper:#FFFFFF; --muted:#B7B3C6;
+    --glass:rgba(255,255,255,0.06); --hair:rgba(255,255,255,0.13);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:linear-gradient(165deg, var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+    background-attachment:fixed;
+    color:var(--paper); font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:1.01rem; line-height:1.7; position:relative; overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.01em; color:#fff;}
+  a{color:inherit;}
+  ul{list-style:none;}
+  ::selection{background:var(--accent); color:var(--bg1);}
+
+  #bg-canvas{position:fixed; inset:0; z-index:0; pointer-events:none;}
+  .grain{position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.04; mix-blend-mode:overlay;}
+
+  @media (hover:hover){ body.cc-on, body.cc-on a, body.cc-on button{cursor:none;} }
+  .cursor-dot,.cursor-ring{position:fixed; top:0; left:0; pointer-events:none; z-index:200; border-radius:50%; transform:translate(-50%,-50%);}
+  .cursor-dot{width:7px; height:7px; background:var(--accent); transition:opacity .2s ease;}
+  .cursor-ring{width:36px; height:36px; border:1px solid rgba(156,135,239,0.55); transition:width .25s ease,height .25s ease,background .25s ease,opacity .2s ease;}
+  .cursor-ring.hovering{width:60px; height:60px; background:var(--accent-soft);}
+  .cursor-dot.hidden,.cursor-ring.hidden{opacity:0;}
+  @media (hover:none){ .cursor-dot,.cursor-ring{display:none;} }
+  .magnetic{transition:transform .2s cubic-bezier(.2,.8,.2,1); display:inline-block;}
+
+  .layout{position:relative; z-index:2; display:grid; grid-template-columns:380px 1fr; min-height:100vh;}
+  @media (max-width:900px){ .layout{grid-template-columns:1fr;} }
+
+  /* LEFT: PROFILE SIDEBAR */
+  .sidebar{
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+    padding:56px 40px; display:flex; flex-direction:column;
+    border-right:1px solid var(--hair);
+  }
+  .sidebar::-webkit-scrollbar{width:0;}
+  @media (max-width:900px){
+    .sidebar{position:static; height:auto; border-right:none; border-bottom:1px solid var(--hair); padding:44px 26px 36px;}
+  }
+  .sidebar .eyebrow{font-family:'IBM Plex Mono'; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent);}
+  .sidebar h1{font-size:1.7rem; margin-top:10px; line-height:1.2;}
+  .sidebar .role{color:var(--muted); font-size:0.95rem; margin-top:8px;}
+  .sidebar .pitch{margin-top:22px; color:var(--muted); font-size:0.94rem; line-height:1.65;}
+
+  .mini-stats{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--hair); border-radius:12px; overflow:hidden; margin-top:26px;}
+  .mini-stat{background:rgba(21,20,31,0.5); padding:16px; text-align:center;}
+  .mini-stat .num{font-family:'Space Grotesk'; font-weight:700; color:var(--accent); font-size:1.5rem; display:block;}
+  .mini-stat .lbl{font-family:'IBM Plex Mono'; font-size:0.62rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-top:4px; display:block;}
+
+  .side-nav{margin-top:34px; display:flex; flex-direction:column; gap:2px;}
+  .side-nav a{
+    font-family:'IBM Plex Mono'; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--muted); padding:10px 12px; border-radius:8px; position:relative; transition:all .25s ease;
+  }
+  .side-nav a::before{content:''; position:absolute; left:0; top:50%; width:0; height:1px; background:var(--accent); transform:translateY(-50%); transition:width .25s ease;}
+  .side-nav a.active, .side-nav a:hover{color:#fff; background:rgba(255,255,255,0.05); padding-left:20px;}
+  .side-nav a.active::before, .side-nav a:hover::before{width:10px;}
+
+  .sidebar-contact{margin-top:auto; padding-top:30px;}
+  .sidebar-contact .lbl{font-family:'IBM Plex Mono'; font-size:0.68rem; text-transform:uppercase; color:var(--muted); letter-spacing:0.06em; margin-bottom:10px; display:block;}
+  .contact-links{display:flex; flex-direction:column; gap:8px;}
+  .contact-links a{font-size:0.92rem; text-decoration:none; padding-bottom:2px; border-bottom:1px solid transparent; transition:all .3s ease; width:fit-content;}
+  .contact-links a:hover{color:var(--accent); border-color:var(--accent); transform:translateX(4px);}
+
+  /* RIGHT: SCROLLING CONTENT */
+  .content{padding:70px 60px 120px; max-width:820px;}
+  @media (max-width:900px){ .content{padding:44px 26px 90px;} }
+
+  section{margin-bottom:110px;}
+  section:last-child{margin-bottom:40px;}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:36px;}
+  .sec-head .num{font-family:'IBM Plex Mono'; color:var(--accent); font-size:0.82rem;}
+  .sec-head h2{font-size:1.7rem;}
+  .sec-head .rule{flex:1; height:1px; background:var(--hair);}
+
+  .reveal{opacity:0; transform:translateY(34px) scale(0.98); transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in-view{opacity:1; transform:translateY(0) scale(1);}
+
+  .glass{background:var(--glass); border:1px solid var(--hair); backdrop-filter:blur(14px); border-radius:14px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease, background .3s ease;}
+  .glass:hover{box-shadow:0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px var(--accent-soft); border-color:rgba(156,135,239,0.4); background:rgba(255,255,255,0.1);}
+
+  #about p{margin-bottom:16px; color:var(--muted); max-width:640px;}
+
+  .timeline{position:relative; padding-left:28px;}
+  .timeline::before{content:''; position:absolute; left:4px; top:6px; bottom:6px; width:2px; background:linear-gradient(var(--accent), transparent 92%); opacity:0.5;}
+  .tl-item{position:relative; padding:0 0 38px 26px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{content:''; position:absolute; left:-28px; top:4px; width:11px; height:11px; border-radius:50%; background:var(--bg1); border:2px solid var(--accent); transition:all .3s ease;}
+  .tl-item:hover::before{background:var(--accent); box-shadow:0 0 0 6px var(--accent-soft); transform:scale(1.15);}
+  .tl-item .yr{font-family:'IBM Plex Mono'; font-size:0.7rem; color:var(--accent);}
+  .tl-item h3{font-size:1.1rem; margin:4px 0 6px;}
+  .tl-item p{color:var(--muted); font-size:0.94rem;}
+
+  .case{padding:28px; margin-bottom:20px;}
+  .case h3{font-size:1.2rem; margin-bottom:8px;}
+  .case .desc{color:var(--muted); margin:10px 0 16px; font-size:0.95rem;}
+  .case .meta{display:flex; gap:10px; flex-wrap:wrap;}
+  .chip{font-family:'IBM Plex Mono'; font-size:0.66rem; text-transform:uppercase; border:1px solid var(--hair); padding:4px 9px; color:var(--muted); border-radius:4px; transition:all .25s ease; display:inline-block;}
+  .chip:hover{color:var(--bg1); background:var(--accent); border-color:var(--accent); transform:translateY(-2px);}
+  .case.placeholder{background:transparent; border:1px dashed var(--hair); border-radius:14px; display:flex; align-items:center; justify-content:center; min-height:90px; color:var(--muted); font-family:'IBM Plex Mono'; font-size:0.82rem; transition:all .3s ease;}
+  .case.placeholder:hover{border-color:var(--accent); color:var(--accent); background:var(--accent-soft);}
+
+  .skill-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px;}
+  .skill-cell{padding:22px;}
+  .skill-cell .tag{font-family:'IBM Plex Mono'; font-size:0.68rem; text-transform:uppercase; color:var(--accent); letter-spacing:0.06em; display:block; margin-bottom:8px;}
+  .skill-cell ul{font-size:0.92rem; color:var(--muted);}
+  .skill-cell li{padding:3px 0;}
+
+  #contact p{color:var(--muted); max-width:480px; margin-bottom:20px;}
+  #contact .contact-links{flex-direction:row; gap:26px; flex-wrap:wrap;}
+  #contact .contact-links a{font-family:'IBM Plex Mono'; font-size:0.9rem;}
+
+  footer{padding:0 0 50px; text-align:left;}
+  footer .fine{font-family:'IBM Plex Mono'; font-size:0.68rem; color:var(--muted);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1; transform:none; transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<svg style="position:absolute; width:0; height:0;">
+  <filter id="noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0"/>
+  </filter>
+</svg>
+<div class="grain" style="filter:url(#noise);"></div>
+
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="eyebrow">Portfolio</div>
+    <h1>Akshay Sudhakaran</h1>
+    <div class="role">MBA Candidate, Digitalization &amp; Industrial Change<br>RWTH Aachen University</div>
+    <p class="pitch">Turning digital transformation into an organizational problem, not a technical one. Five years building AI/ML and full-stack systems at TCS, now focused on the strategy and change side of the same transformations.</p>
+
+    <div class="mini-stats">
+      <div class="mini-stat"><span class="num">5+</span><span class="lbl">Years Experience</span></div>
+      <div class="mini-stat"><span class="num">2</span><span class="lbl">Degrees</span></div>
+      <div class="mini-stat"><span class="num">3</span><span class="lbl">Focus Areas</span></div>
+      <div class="mini-stat"><span class="num">1</span><span class="lbl">PM Certification</span></div>
+    </div>
+
+    <nav class="side-nav" id="sideNav">
+      <a href="#about" data-target="about">About</a>
+      <a href="#journey" data-target="journey">Journey</a>
+      <a href="#work" data-target="work">Case Studies</a>
+      <a href="#skills" data-target="skills">Focus Areas</a>
+      <a href="#contact" data-target="contact">Contact</a>
+    </nav>
+
+    <div class="sidebar-contact">
+      <span class="lbl">Get in touch</span>
+      <div class="contact-links">
+        <a href="mailto:you@example.com" class="magnetic">Email</a>
+        <a href="#" target="_blank" class="magnetic">LinkedIn</a>
+        <a href="#" target="_blank" class="magnetic">GitHub</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <section id="about">
+      <div class="sec-head reveal"><span class="num">01</span><h2>About</h2><div class="rule"></div></div>
+      <div class="reveal">
+        <p>I spent five years at Tata Consultancy Services working on both ends of enterprise technology: building AI/ML and robotics prototypes for retail clients, and modernizing core banking platforms for a US bank as a full-stack developer.</p>
+        <p>That gave me a close-up view of where digital transformation projects actually stall, and it's rarely the technology itself. It's almost always the people, process, and change management around it. That's the problem I'm now studying formally, and the one I want to work on next.</p>
+        <p>Based in Aachen, Germany. Open to working student, internship, and thesis roles across NRW and wider Germany/Europe.</p>
+      </div>
+    </section>
+
+    <section id="journey">
+      <div class="sec-head reveal"><span class="num">02</span><h2>Journey</h2><div class="rule"></div></div>
+      <div class="timeline reveal">
+        <div class="tl-item">
+          <span class="yr">2016 to 2020</span>
+          <h3>B.Tech, Electronics &amp; Communication Engineering</h3>
+          <p>Kerala Technological University</p>
+        </div>
+        <div class="tl-item">
+          <span class="yr">2020 to 2025</span>
+          <h3>Innovation Engineer &amp; Full Stack Developer, TCS</h3>
+          <p>Retail AI/ML and robotics prototypes, plus full-stack modernization for a US banking client.</p>
+        </div>
+        <div class="tl-item">
+          <span class="yr">Now</span>
+          <h3>MBA, Digitalization &amp; Industrial Change</h3>
+          <p>RWTH Aachen University</p>
+        </div>
+        <div class="tl-item">
+          <span class="yr">Next</span>
+          <h3>Project Management, Strategy, or Digital Transformation role</h3>
+          <p>Open to working student, internship, and thesis positions across Germany and Europe.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="sec-head reveal"><span class="num">03</span><h2>Case Studies</h2><div class="rule"></div></div>
+
+      <div class="case glass reveal">
+        <h3>A.I.D.A., Design Thinking for Elderly Drivers (Ford)</h3>
+        <p class="desc">Contributed to pitch materials for a design-thinking project developing a driver-assistance concept for elderly drivers, including TAM/SAM/SOM market sizing across North America and Europe.</p>
+        <div class="meta">
+          <span class="chip">Design Thinking</span><span class="chip">Market Sizing</span><span class="chip">Automotive</span>
+        </div>
+      </div>
+
+      <div class="case placeholder reveal" style="transition-delay:.1s">Add your next case study here</div>
+    </section>
+
+    <section id="skills">
+      <div class="sec-head reveal"><span class="num">04</span><h2>Focus Areas</h2><div class="rule"></div></div>
+      <div class="skill-grid">
+        <div class="skill-cell glass reveal">
+          <span class="tag">Strategy</span>
+          <ul><li>Digital transformation</li><li>Corporate strategy</li><li>Change management</li></ul>
+        </div>
+        <div class="skill-cell glass reveal" style="transition-delay:.1s">
+          <span class="tag">Delivery</span>
+          <ul><li>Project management</li><li>PMO</li><li>Google PM certified</li></ul>
+        </div>
+        <div class="skill-cell glass reveal" style="transition-delay:.2s">
+          <span class="tag">Technical Background</span>
+          <ul><li>AI/ML (retail)</li><li>Robotics</li><li>Full-stack development</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="sec-head reveal"><span class="num">05</span><h2>Contact</h2><div class="rule"></div></div>
+      <div class="reveal">
+        <p>Open to working student, internship, and thesis opportunities in project management and digital transformation.</p>
+        <div class="contact-links">
+          <a href="mailto:you@example.com" class="magnetic">Email</a>
+          <a href="#" target="_blank" class="magnetic">LinkedIn</a>
+          <a href="#" target="_blank" class="magnetic">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <footer><div class="fine">Built and maintained by Akshay Sudhakaran, Aachen, Germany</div></footer>
+  </main>
+
+</div>
+
+<script>
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Scroll reveal */
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      e.target.classList.toggle('in-view', e.isIntersecting);
+      if (e.isIntersecting) spawnPulse();
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+  revealEls.forEach((el) => io.observe(el));
+
+  /* Active side-nav link on scroll */
+  const navLinks = document.querySelectorAll('#sideNav a');
+  const sections = document.querySelectorAll('main section[id]');
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        navLinks.forEach((l) => l.classList.toggle('active', l.dataset.target === entry.target.id));
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach((s) => navIO.observe(s));
+
+  /* Custom cursor */
+  const cursorDot = document.getElementById('cursorDot');
+  const cursorRing = document.getElementById('cursorRing');
+  if (cursorDot && cursorRing && canHover && !reduceMotion) {
+    document.body.classList.add('cc-on');
+    let ringX = innerWidth/2, ringY = innerHeight/2, mouseX = ringX, mouseY = ringY;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px';
+    });
+    (function animateRing(){
+      ringX += (mouseX-ringX)*0.18; ringY += (mouseY-ringY)*0.18;
+      cursorRing.style.left = ringX+'px'; cursorRing.style.top = ringY+'px';
+      requestAnimationFrame(animateRing);
+    })();
+    document.querySelectorAll('a, button, .glass, .chip').forEach((el) => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+    });
+    document.addEventListener('mouseleave', () => { cursorDot.classList.add('hidden'); cursorRing.classList.add('hidden'); });
+    document.addEventListener('mouseenter', () => { cursorDot.classList.remove('hidden'); cursorRing.classList.remove('hidden'); });
+  }
+
+  /* Magnetic links */
+  if (canHover && !reduceMotion) {
+    document.querySelectorAll('.magnetic').forEach((el) => {
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2;
+        el.style.transform = `translate(${x*0.25}px, ${y*0.25}px)`;
+      });
+      el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+    });
+  }
+
+  /* Tilt on glass cards */
+  if (canHover && !reduceMotion) {
+    document.querySelectorAll('.glass').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left)/r.width - 0.5, py = (e.clientY - r.top)/r.height - 0.5;
+        card.style.transform = `perspective(900px) rotateX(${-py*7}deg) rotateY(${px*7}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  /* Scroll-reactive constellation + aurora canvas */
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [], pulses = [];
+  const mouse = { x: null, y: null };
+  function resize(){ w = canvas.width = innerWidth; h = canvas.height = innerHeight; setupRibbons(); }
+  const count = Math.min(60, Math.floor((innerWidth*innerHeight)/24000));
+
+  /* Aurora ribbons */
+  let ribbons = [];
+  function setupRibbons(){
+    ribbons = [
+      { baseY: h*0.12, amp: 70, freq: 0.0028, speed: 0.00035, phase: 0,   thickness: 220, parallax: 0.5,
+        c1:'rgba(156,135,239,0.16)', c2:'rgba(200,190,245,0.10)' },
+      { baseY: h*0.38, amp: 90, freq: 0.0022, speed: 0.00028, phase: 2.1, thickness: 260, parallax: 0.8,
+        c1:'rgba(120,105,200,0.14)', c2:'rgba(180,165,235,0.08)' },
+      { baseY: h*0.66, amp: 60, freq: 0.0032, speed: 0.00042, phase: 4.4, thickness: 200, parallax: 0.3,
+        c1:'rgba(200,190,245,0.12)', c2:'rgba(156,135,239,0.07)' }
+    ];
+  }
+  resize(); window.addEventListener('resize', resize);
+  for (let i=0;i<count;i++){
+    particles.push({ x: Math.random()*w, y: Math.random()*h, vx:(Math.random()-0.5)*0.22, vy:(Math.random()-0.5)*0.22, r: Math.random()*1.5+0.6 });
+  }
+  window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+  /* Scroll nudges the particle field and drives aurora parallax */
+  let lastScrollY = window.scrollY;
+  let parallaxTarget = 0, parallaxCurrent = 0;
+  window.addEventListener('scroll', () => {
+    const delta = window.scrollY - lastScrollY;
+    lastScrollY = window.scrollY;
+    const push = Math.max(-2.5, Math.min(2.5, delta * 0.04));
+    particles.forEach((p) => { p.vy += push * 0.02; });
+    parallaxTarget = window.scrollY;
+  }, { passive: true });
+
+  function drawAurora(time){
+    parallaxCurrent += (parallaxTarget - parallaxCurrent) * 0.06;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.filter = 'blur(46px)';
+    ribbons.forEach((rb) => {
+      const yShift = parallaxCurrent * rb.parallax * 0.03;
+      ctx.beginPath();
+      const pts = [];
+      for (let x = -40; x <= w + 40; x += 32) {
+        const y = rb.baseY + Math.sin(x * rb.freq + time * rb.speed + rb.phase) * rb.amp + yShift;
+        pts.push([x, y]);
+      }
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      pts.forEach((p) => ctx.lineTo(p[0], p[1]));
+      for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(pts[i][0], pts[i][1] + rb.thickness);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(0, rb.baseY + yShift, 0, rb.baseY + yShift + rb.thickness);
+      grad.addColorStop(0, rb.c1);
+      grad.addColorStop(0.55, rb.c2);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+    });
+    ctx.filter = 'none';
+    ctx.restore();
+  }
+
+  function spawnPulse(){
+    pulses.push({ x: w * (0.25 + Math.random()*0.5), y: h * (0.25 + Math.random()*0.5), r: 4, alpha: 0.5 });
+  }
+
+  function drawBG(time){
+    ctx.clearRect(0,0,w,h);
+    drawAurora(time || 0);
+    for (const p of particles){
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= 0.999; p.vy *= 0.999;
+      if (p.x < 0 || p.x > w) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+    }
+    for (let i=0;i<particles.length;i++){
+      for (let j=i+1;j<particles.length;j++){
+        const a = particles[i], b = particles[j];
+        const d = Math.hypot(a.x-b.x, a.y-b.y);
+        if (d < 130){
+          ctx.strokeStyle = `rgba(156,135,239,${0.12*(1-d/130)})`;
+          ctx.lineWidth = 0.6;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+      if (mouse.x !== null){
+        const d = Math.hypot(particles[i].x-mouse.x, particles[i].y-mouse.y);
+        if (d < 170){
+          ctx.strokeStyle = `rgba(156,135,239,${0.3*(1-d/170)})`;
+          ctx.lineWidth = 0.8;
+          ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke();
+        }
+      }
+      ctx.fillStyle = 'rgba(200,190,245,0.5)';
+      ctx.beginPath(); ctx.arc(particles[i].x, particles[i].y, particles[i].r, 0, Math.PI*2); ctx.fill();
+    }
+    for (let i = pulses.length - 1; i >= 0; i--) {
+      const p = pulses[i];
+      p.r += 2.2; p.alpha -= 0.012;
+      if (p.alpha <= 0) { pulses.splice(i, 1); continue; }
+      ctx.strokeStyle = `rgba(156,135,239,${p.alpha})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.stroke();
+    }
+    requestAnimationFrame(drawBG);
+  }
+  if (!reduceMotion) requestAnimationFrame(drawBG); else ctx.clearRect(0,0,w,h);
+</script>
+
+</body>
+</html>

@@ -105,6 +105,63 @@
   .tl-item h3{font-size:1.1rem; margin:4px 0 6px;}
   .tl-item p{color:var(--muted); font-size:0.94rem;}
 
+  /* CASE STUDIES — horizontal carousel */
+  .case-scroll{
+    display:flex;
+    align-items:flex-start;
+    gap:24px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding-top:20px;
+    padding-bottom:24px;
+    padding-left:max(20px, calc(50% - 210px));
+    padding-right:max(20px, calc(50% - 210px));
+    scroll-snap-type:x proximity;
+    scroll-padding-left:max(20px, calc(50% - 210px));
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:var(--accent) rgba(255,255,255,0.06);
+    perspective:1400px;
+  }
+  .case-scroll::-webkit-scrollbar{ height:8px; }
+  .case-scroll::-webkit-scrollbar-track{ background:rgba(255,255,255,0.06); border-radius:4px; }
+  .case-scroll::-webkit-scrollbar-thumb{ background:var(--accent); border-radius:4px; }
+  .case-scroll .case{
+    flex:0 0 420px;
+    margin-bottom:0;
+    padding:20px 26px;
+    cursor:pointer;
+    scroll-snap-align:center;
+    opacity:var(--fade, 1);
+    filter:blur(var(--blur, 0px));
+    transform:rotateY(var(--rot, 0deg)) translateZ(var(--tz, 0px)) scale(var(--fscale, 1));
+    transition:opacity .25s ease, transform .25s ease, filter .25s ease;
+  }
+  .case-scroll .case h3{font-size:1.08rem; margin-bottom:6px;}
+  .case-scroll .case .desc{
+    font-size:0.88rem; margin:6px 0 12px; line-height:1.5;
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .case-scroll .case .desc.expanded{
+    -webkit-line-clamp:unset; overflow:visible; display:block;
+  }
+  .read-toggle{
+    background:none; border:none; color:var(--accent); font-family:'IBM Plex Mono';
+    font-size:0.75rem; cursor:pointer; padding:0 0 14px; display:block;
+  }
+  .read-toggle:hover{ text-decoration:underline; }
+  @media (max-width:700px){
+    .case-scroll .case{ flex-basis:82vw; }
+  }
+
+  .case-nav{display:flex; gap:10px; margin-top:18px;}
+  .case-num{
+    width:32px; height:32px; border-radius:50%; border:1px solid var(--hair);
+    background:transparent; color:var(--muted); font-family:'IBM Plex Mono'; font-size:0.8rem;
+    cursor:pointer; transition:all .25s ease;
+  }
+  .case-num:hover{border-color:var(--accent); color:#fff;}
+  .case-num.active{background:var(--accent); border-color:var(--accent); color:var(--bg1); font-weight:600;}
   .case{padding:28px; margin-bottom:20px;}
   .case h3{font-size:1.2rem; margin-bottom:8px;}
   .case .desc{color:var(--muted); margin:10px 0 16px; font-size:0.95rem;}
@@ -173,9 +230,8 @@
     <div class="sidebar-contact">
       <span class="lbl">Get in touch</span>
       <div class="contact-links">
-        <a href="mailto:you@example.com" class="magnetic">Email</a>
-        <a href="#" target="_blank" class="magnetic">LinkedIn</a>
-        <a href="#" target="_blank" class="magnetic">GitHub</a>
+        <a href="mailto:akshayss1998@gmail.com" class="magnetic">akshayss1998@gmail.com</a>
+        <a href="https://linkedin.com/in/akshay-s-9428a3102" target="_blank" class="magnetic">linkedin.com/in/akshay-s-9428a3102</a>
       </div>
     </div>
   </aside>
@@ -185,9 +241,9 @@
     <section id="about">
       <div class="sec-head reveal"><span class="num">01</span><h2>About</h2><div class="rule"></div></div>
       <div class="reveal">
-        <p>I spent five years at Tata Consultancy Services working on both ends of enterprise technology: building AI/ML and robotics prototypes for retail clients, and modernizing core banking platforms for a US bank as a full-stack developer.</p>
-        <p>That gave me a close-up view of where digital transformation projects actually stall, and it's rarely the technology itself. It's almost always the people, process, and change management around it. That's the problem I'm now studying formally, and the one I want to work on next.</p>
-        <p>Based in Aachen, Germany. Open to working student, internship, and thesis roles across NRW and wider Germany/Europe.</p>
+        <p>MBA candidate (RWTH Aachen, Digitalization &amp; Industrial Change) with 4 years of experience in software development and innovation engineering across retail and banking.</p>
+        <p>Developing change management, strategic communication, and organizational transformation skills, with a strong cross-functional collaboration and problem-solving record.</p>
+        <p>Based in Aachen, Germany. Open to working student, internship, and thesis roles across NRW and wider Germany/Europe, seeking roles in product management, strategy, and digital transformation.</p>
       </div>
     </section>
 
@@ -220,15 +276,50 @@
     <section id="work">
       <div class="sec-head reveal"><span class="num">03</span><h2>Case Studies</h2><div class="rule"></div></div>
 
-      <div class="case glass reveal">
-        <h3>A.I.D.A., Design Thinking for Elderly Drivers (Ford)</h3>
-        <p class="desc">Contributed to pitch materials for a design-thinking project developing a driver-assistance concept for elderly drivers, including TAM/SAM/SOM market sizing across North America and Europe.</p>
-        <div class="meta">
-          <span class="chip">Design Thinking</span><span class="chip">Market Sizing</span><span class="chip">Automotive</span>
+      <div class="case-scroll">
+        <div class="case glass reveal">
+          <h3>A.I.D.A., Design Thinking for Elderly Drivers (Ford)</h3>
+          <p class="desc">A.I.D.A. is a Ford concept designed around one goal: helping elderly drivers stay safe, independent, and genuinely happy behind the wheel, with a primary focus on the European market. It adapts to the moment, acting as an emergency responder when something goes wrong, and as a calm companion and assistant through everyday situations. The result is a system built not just to protect elderly drivers, but to support the independence they don't want to give up.</p>
+          <button class="read-toggle" type="button">Read more</button>
+          <div class="meta">
+            <span class="chip">Design Thinking</span><span class="chip">Market Sizing</span><span class="chip">Automotive</span>
+          </div>
+        </div>
+
+        <div class="case glass reveal">
+          <h3>PMSE Reimagined: Subscription-Driven Digital Transformation</h3>
+          <p class="desc">As part of an MBA group case study, we proposed a subscription model and digitalization strategy to help a traditional printing press survive digital disruption. My contribution was remodeling the legacy architecture into a standard digital layer built to support AI integration and the new subscription model. This layer connects the press to factories and machines, feeding real-time data back for R&amp;D, service, and predictive maintenance. The result locks customers into continuous value through ongoing consulting, optimization, and cost reduction, rather than a one-time sale.</p>
+          <button class="read-toggle" type="button">Read more</button>
+          <div class="meta">
+            <span class="chip">Industry 4.0</span><span class="chip">Digitalization &amp; Transformation</span>
+          </div>
+        </div>
+
+        <div class="case glass reveal">
+          <h3>Nearo: Solving Germany's €28B Secondhand Delivery Gap</h3>
+          <p class="desc">Nearo is a two-sided marketplace connecting buyers of bulky secondhand items with private van and transporter owners, solving the 'last mile' problem that leaves people stuck carrying furniture home on foot or paying steep mover fees. Built around students and young professionals in Germany's car-free demographic, it targets a secondhand goods market projected to nearly triple to €28.5B by 2035. As an Engineer on the team, I contributed to the platform's service architecture, connecting driver matching, pricing, and delivery tracking into one seamless booking flow.</p>
+          <button class="read-toggle" type="button">Read more</button>
+          <div class="meta">
+            <span class="chip">Digital Solutions</span><span class="chip">Marketing &amp; Market Strategy</span>
+          </div>
+        </div>
+
+        <div class="case glass reveal">
+          <h3>e.Volution: From Institutional Fleets to OEM Licensing</h3>
+          <p class="desc">As part of a Strategic Management group project, we conducted a VRIO analysis of e.Volution, a startup building circular, modular EVs around a long-life chassis ('Oscar') designed for decades of upgrades rather than replacement. We identified their real competitive edge in high switching costs and a 20-year asset lifecycle that legacy automakers can't easily imitate, and proposed a two-phase growth strategy: direct sales to institutional fleets like ambulances and airport shuttles first, then licensing the chassis IP to OEMs for urban logistics at scale. This structure lets e.Volution capture a defensible niche before competing head-on in the broader EV market.</p>
+          <button class="read-toggle" type="button">Read more</button>
+          <div class="meta">
+            <span class="chip">Strategic Thinking</span><span class="chip">Business Model Innovation</span>
+          </div>
         </div>
       </div>
 
-      <div class="case placeholder reveal" style="transition-delay:.1s">Add your next case study here</div>
+      <div class="case-nav" id="caseNav">
+        <button class="case-num active" data-index="0" aria-label="Case study 1">1</button>
+        <button class="case-num" data-index="1" aria-label="Case study 2">2</button>
+        <button class="case-num" data-index="2" aria-label="Case study 3">3</button>
+        <button class="case-num" data-index="3" aria-label="Case study 4">4</button>
+      </div>
     </section>
 
     <section id="skills">
@@ -244,7 +335,7 @@
         </div>
         <div class="skill-cell glass reveal" style="transition-delay:.2s">
           <span class="tag">Technical Background</span>
-          <ul><li>AI/ML (retail)</li><li>Robotics</li><li>Full-stack development</li></ul>
+          <ul><li>Retail</li><li>Robotics</li><li>Full-stack development</li></ul>
         </div>
       </div>
     </section>
@@ -254,9 +345,8 @@
       <div class="reveal">
         <p>Open to working student, internship, and thesis opportunities in project management and digital transformation.</p>
         <div class="contact-links">
-          <a href="mailto:you@example.com" class="magnetic">Email</a>
-          <a href="#" target="_blank" class="magnetic">LinkedIn</a>
-          <a href="#" target="_blank" class="magnetic">GitHub</a>
+          <a href="mailto:akshayss1998@gmail.com" class="magnetic">akshayss1998@gmail.com</a>
+          <a href="https://linkedin.com/in/akshay-s-9428a3102" target="_blank" class="magnetic">linkedin.com/in/akshay-s-9428a3102</a>
         </div>
       </div>
     </section>
@@ -327,9 +417,10 @@
     });
   }
 
-  /* Tilt on glass cards */
+  /* Tilt on glass cards (not the case carousel, which uses its own scale/fade) */
   if (canHover && !reduceMotion) {
     document.querySelectorAll('.glass').forEach((card) => {
+      if (card.closest('.case-scroll')) return;
       card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left)/r.width - 0.5, py = (e.clientY - r.top)/r.height - 0.5;
@@ -337,6 +428,80 @@
       });
       card.addEventListener('mouseleave', () => { card.style.transform = ''; });
     });
+  }
+
+  /* Case study carousel: momentum wheel scroll + center-focus fade */
+  const caseScroll = document.querySelector('.case-scroll');
+  if (caseScroll) {
+    const caseCards = Array.from(caseScroll.querySelectorAll('.case'));
+    const caseNumBtns = document.querySelectorAll('.case-num');
+    let velocity = 0;
+
+    caseScroll.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        velocity += e.deltaY * 0.9;
+      }
+    }, { passive: false });
+
+    caseNumBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = caseCards[parseInt(btn.dataset.index, 10)];
+        if (card) card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
+    });
+
+    caseCards.forEach((card) => {
+      card.addEventListener('click', () => {
+        card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      });
+    });
+
+    caseScroll.querySelectorAll('.read-toggle').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const desc = btn.previousElementSibling;
+        const expanded = desc.classList.toggle('expanded');
+        btn.textContent = expanded ? 'Show less' : 'Read more';
+      });
+    });
+
+    function updateFade() {
+      const rect = caseScroll.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      let activeIdx = 0, closestDist = Infinity;
+      caseCards.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const cardCenter = r.left + r.width / 2;
+        const offset = cardCenter - centerX;
+        const dist = Math.abs(offset);
+        if (dist < closestDist) { closestDist = dist; activeIdx = i; }
+        const maxDist = rect.width / 2 + r.width / 2;
+        const t = Math.min(dist / maxDist, 1);
+        const sign = offset === 0 ? 0 : offset / dist;
+        card.style.setProperty('--fade', (1 - t * 0.62).toFixed(2));
+        card.style.setProperty('--fscale', (1 - t * 0.1).toFixed(3));
+        card.style.setProperty('--rot', (-sign * t * 24).toFixed(1) + 'deg');
+        card.style.setProperty('--tz', (-t * 70).toFixed(0) + 'px');
+        card.style.setProperty('--blur', (t * 2.2).toFixed(2) + 'px');
+      });
+      caseNumBtns.forEach((b) => b.classList.toggle('active', parseInt(b.dataset.index, 10) === activeIdx));
+    }
+
+    function momentumLoop() {
+      if (Math.abs(velocity) > 0.4) {
+        caseScroll.scrollLeft += velocity * 0.12;
+        velocity *= 0.88;
+      } else {
+        velocity = 0;
+      }
+      updateFade();
+      requestAnimationFrame(momentumLoop);
+    }
+    caseScroll.addEventListener('scroll', updateFade, { passive: true });
+    window.addEventListener('resize', updateFade);
+    updateFade();
+    if (!reduceMotion) requestAnimationFrame(momentumLoop);
   }
 
   /* Scroll-reactive constellation + aurora canvas */
